@@ -1,6 +1,7 @@
 import os
-import jsonify
+from flask import jsonify
 from dotenv import load_dotenv
+
 
 def verify_webhook(request):
     """
@@ -25,6 +26,3 @@ def verify_webhook(request):
 
     print("MISSING PARAMETERS.")
     return jsonify({"success": False, "error": {"code": 400, "msg": "Missing parameter(s)."}}), 400
-
-def handle_webhook(request):
-    return None
