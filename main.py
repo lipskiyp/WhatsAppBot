@@ -1,6 +1,7 @@
 from flask import Flask, request
 
-from .helpers import verify_webhook, handle_webhook
+from .helpers.handle_webhook import handle_webhook
+from .helpers.verify_webhook import verify_webhook
 
 
 app = Flask(__name__)

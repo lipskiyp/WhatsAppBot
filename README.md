@@ -1,1 +1,1 @@
-# Basic WhatsApp API Bot (In Progress)
+# WhatsApp API Bot (In Progress)
