@@ -1,3 +1,4 @@
+from dotenv import load_dotenv
 from flask import Flask, request
 
 from .helpers.handle_webhook import handle_webhook
@@ -12,6 +13,9 @@ def index():
 
 @app.route("/mywebhook", methods=["get", "post"])
 def my_webhook():
+    # Load environment variables from .env file.
+    load_dotenv()
+
     if request.method == "GET":
         return verify_webhook(request)
     if request.method == "POST":
