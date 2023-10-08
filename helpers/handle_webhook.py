@@ -16,12 +16,13 @@ def handle_webhook(request):
             body.get("entry"),
             body.get("object") == NOTIFICATION_OBJECT,
         ):
-            # Handle messages.
+            # Handle "messages" events.
             if body.get("entry")[0].get("changes")[0].get("field") == "messages":
                 handle_messages(body)
             else:
                 print("UNKNOWN FIELD - PASS.")
             return jsonify({"success": True, "status": "ok", "msg": "Notification handled ok."}), 200
+
         else:
             print("INVALID NOTIFICATION FORMAT.")
             return jsonify({"success": False, "error": {"code": 404, "msg": "Invalid notification format."}}), 404
