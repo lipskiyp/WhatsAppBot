@@ -1,5 +1,5 @@
-import os
 from flask import jsonify
+import os
 
 
 def verify_webhook(request):

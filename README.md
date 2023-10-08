@@ -6,13 +6,13 @@ WhatsApp API Bot with a Flask server, launched using ngrok.
 
 * Initial webhook configuration and token verification with Meta.
 * Incoming messages - server marks the incoming message as "read" and responds with a default greeting text message.
-* Prints status updates for the outhoing messages (e.g. "delivered", "read" etc.)
+* Prints status updates for sent messages (e.g. "delivered", "read" etc.)
 
 ### The app requires the following variables to be stored inside the environment for it to work:
 
 * WHATSAPP_TOKEN - (temporary) Meta access token (can be found inside the "API Set Up" section on the Meta for Developers website).
 * VERIFY_TOKEN - your own verification token to be used for the webhook configuration (can be any string).
-* GRAPH_BASE_API - base graph API url (currently version 17 is used - https://graph.facebook.com/v17.0/).
+* GRAPH_BASE_API - base API url (currently version 17 is used - https://graph.facebook.com/v17.0/).
 * PHONE_NUMBER_ID - your sender WhatsApp phone number id.
 
 ## main.py
@@ -25,8 +25,8 @@ Handles the initial webhook set up and token verification logic for GET requests
 
 ## /helpers/handle_webhook.py
 
-Handles logic for the webhook notifications.
+Handles webhook notifications for POST requests to /mywebhook endpoint.
 
-## /helpers/handle_text_message.py
+## /helpers/handle_messages.py
 
 Handles logic for text messages.

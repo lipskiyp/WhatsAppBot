@@ -2,7 +2,7 @@ import os
 import requests
 
 def set_text_message_status(message_id, status="", sender_number_id="", verification_token=""):
-    # Set status to "read" by default
+    # Set status to "read" by default.
     if not status:
         status = "read"
     # Uses the environment variables PHONE_NUMBER_ID for sender_number_id and WHATSAPP_TOKEN for verification_token if none provided.
@@ -23,7 +23,7 @@ def set_text_message_status(message_id, status="", sender_number_id="", verifica
 
     endpoint = os.environ.get('GRAPH_BASE_API') + f"{sender_number_id}/messages"
     response = requests.post(endpoint, headers=headers, json=json_data)
-    # Raise error if failed
+    # Raise error if failed.
     response.raise_for_status()
 
 def send_text_message(message, recipient_number, sender_number_id="", verification_token=""):
@@ -51,20 +51,25 @@ def send_text_message(message, recipient_number, sender_number_id="", verificati
 
     endpoint = os.environ.get('GRAPH_BASE_API') + f"{sender_number_id}/messages"
     response = requests.post(endpoint, headers=headers, json=json_data)
-    # Raise error if failed
+    print(f'OUTGOING TEXT MESSAGE: "{message}" TO: "{recipient_number}"')
+    # Raise error if failed.
     response.raise_for_status()
 
 def handle_status_notifications(body):
     """
-    Handles status notifications.
+    Handles status notifications for the sent messages.
     """
     recipient_id = body.get("entry")[0].get("changes")[0].get("value").get("statuses")[0].get("recipient_id")
     message_status = body.get("entry")[0].get("changes")[0].get("value").get("statuses")[0].get("status")
-    print(f"MESSAGE TO {recipient_id} STATUS UPDATE: {message_status}")
+    print(f"MESSAGE TO {recipient_id} STATUS: {message_status}")
+
+    # Handle failed sent messages.
+    if message_status == "failed":
+        pass
 
 def handle_text_message(body):
     """
-    Handles the incoming text-messages.
+    Handles the incoming text-message.
     """
     message = body.get("entry")[0].get("changes")[0].get("value").get("messages")[0].get("text").get("body")
     message_id = body.get("entry")[0].get("changes")[0].get("value").get("messages")[0].get("id")
@@ -75,7 +80,7 @@ def handle_text_message(body):
     # Set message status to "read".
     set_text_message_status(message_id=message_id, status="read")
 
-    # Respond to the message
+    # Respond to the message.
     send_text_message(
         message=f"Hey, {recipient_name}!",
         recipient_number=recipient_number
@@ -83,14 +88,14 @@ def handle_text_message(body):
 
 def handle_messages(body):
     """
-    Handles incoming messages notifications.
+    Handles incoming "messages" events.
     """
-    # Handle status notification
+    # Handle status events for sent messages.
     if body.get("entry")[0].get("changes")[0].get("value").get("statuses"):
         handle_status_notifications(body)
         return
 
     message_type = body.get("entry")[0].get("changes")[0].get("value").get("messages")[0].get("type")
-    # Handle text messages
+    # Handle incoming text-messages.
     if message_type == "text":
         handle_text_message(body)
